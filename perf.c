@@ -9,6 +9,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define READ_END(flieds) fileds[0]
+#define WRITE_END(flieds) fileds[1]
 
 typedef struct{
    char name[40];
@@ -35,7 +37,7 @@ void child(int argc, char* argv[]){
       }*/
      // printf("\n");
      p_argv[argc + 1] = NULL; 
-     dup2(fileds[1], STDERR_FILENO);
+     dup2(WRITE_END(fileds), STDERR_FILENO);
      int rel = open("/dev/null", O_WRONLY | O_APPEND);
      dup2(rel, STDOUT_FILENO);
      //char *envp[] = {"PATH=/bin", NULL};
@@ -46,7 +48,7 @@ void child(int argc, char* argv[]){
 }
 
 void parent(){
-       dup2(fileds[0], STDIN_FILENO);
+       dup2(READ_END(fileds), STDIN_FILENO);
        char buf[1024] = {0};
        while(fgets(buf, 1024, stdin)!= NULL){
          if(!strncmp(buf, "+++", 3)){
@@ -115,11 +117,11 @@ int main(int argc, char *argv[]) {
           printf("An error occurred when forking.\n");
        }
        else if(pid == 0){ //child
-	  close(fileds[0]);
+	  close(READ_END(fileds));
           child(argc, argv);
        }
        else{ //father
-	      close(fileds[1]);
+	      close(WRITE_END(fileds));
    	      num = 0;
 	      parent();
 	      num -= 1;
