@@ -35,9 +35,9 @@ void child(int argc, char* argv[]){
       }*/
      // printf("\n");
      p_argv[argc + 1] = NULL; 
-     dup2(fileds[1], 2);
+     dup2(fileds[1], STDERR_FILENO);
      int rel = open("/dev/null", O_WRONLY | O_APPEND);
-     dup2(rel, 1);
+     dup2(rel, STDOUT_FILENO);
      //char *envp[] = {"PATH=/bin", NULL};
      execvp(p_argv[0], p_argv);
      //printf("An error occurred when execving.\n");
@@ -46,7 +46,7 @@ void child(int argc, char* argv[]){
 }
 
 void parent(){
-       dup2(fileds[0], 0);
+       dup2(fileds[0], STDIN_FILENO);
        char buf[1024] = {0};
        while(fgets(buf, 1024, stdin)!= NULL){
          if(!strncmp(buf, "+++", 3)){
