@@ -6,6 +6,9 @@
 #include <errno.h>
 #include <dirent.h>
 #include <regex.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 
 typedef struct{
    char name[40];
