@@ -67,7 +67,7 @@ void parent(){
          regcomp(&reg, pattern1, cflags);
 	 status = regexec(&reg, buf, nmatch, pmatch, 0);
 	 if(status == REG_NOMATCH)
-               printf("No match\n");
+   //               printf("No match\n");
          else if(status == 0){
               for(chk = pmatch[0].rm_so; chk < pmatch[0].rm_eo; ++chk){
                  temp_name[chk - pmatch[0].rm_so] = buf[chk]; 
