@@ -66,9 +66,9 @@ void parent(){
          const char *pattern = "\\<([0-9]+)\\.([0-9]+)";
          regcomp(&reg, pattern1, cflags);
 	 status = regexec(&reg, buf, nmatch, pmatch, 0);
-	 if(status == REG_NOMATCH)
+//	 if(status == REG_NOMATCH)
    //               printf("No match\n");
-         else if(status == 0){
+         if(status == 0){
               for(chk = pmatch[0].rm_so; chk < pmatch[0].rm_eo; ++chk){
                  temp_name[chk - pmatch[0].rm_so] = buf[chk]; 
 	      }
@@ -76,9 +76,9 @@ void parent(){
          regfree(&reg);
          regcomp(&reg, pattern, cflags);
          status = regexec(&reg, buf, nmatch, pmatch, 0);
-	 if(status == REG_NOMATCH)
-            printf("No match\n");
-	 else if(status == 0){
+	// if(status == REG_NOMATCH)
+         //   printf("No match\n");
+	 if(status == 0){
 	       for(chk = pmatch[0].rm_so; chk < pmatch[0].rm_eo; ++chk){
 		       temp_time[chk - pmatch[0].rm_so] = buf[chk];
 		      // putchar(buf[chk]);
