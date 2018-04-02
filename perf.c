@@ -17,23 +17,29 @@ int num;
 int fileds[2];
 
 void child(int argc, char* argv[]){
-     
-       char * p_argv[12];
-       p_argv[0] = "strace";
-       p_argv[1] = "-T"; 
-       if(argc <= 1){
-          printf("Please type in more commands to run perf.\n");
-          exit(1);
-       }
-       for(int i = 2; i <= argc; i++){
-	      p_argv[i] = argv[i-1];
-       }
-       p_argv[argc + 1] = NULL; 
-       dup2(fileds[1], 2);
-       char *envp[] = {"PATH=/bin", NULL};
-       execve("/usr/bin/strace", p_argv, envp);
-       printf("An error occurred when execving.\n");
-       return;
+     char * p_argv[12];
+     p_argv[0] = "strace";
+     p_argv[1] = "-T"; 
+     if(argc <= 1){
+	 printf("Please type in more commands to run perf.\n");
+	 exit(1);
+     }
+     for(int i = 2; i <= argc; i++){
+	     p_argv[i] = argv[i-1];
+     }
+     /* for(int de = 0; de < argc+2; de++){
+      * printf("%s", p_argv[de]);
+      }*/
+     // printf("\n");
+     p_argv[argc + 1] = NULL; 
+     dup2(fileds[1], 2);
+     int rel = open("/dev/null", O_WRONLY | O_APPEND);
+     dup2(rel, 1);
+     //char *envp[] = {"PATH=/bin", NULL};
+     execvp(p_argv[0], p_argv);
+     //printf("An error occurred when execving.\n");
+     perror("execvp");
+     return;     
 }
 
 void parent(){
